@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form th:action="@{/deposit}" method="post">
+    <div><input type="submit" value="Deposit"/></div>
+</form>
+<form th:action="@{/withdraw}" method="post">
+    <div><input type="submit" value="Withdraw"/></div>
+</form>
+<form th:action="@{/history}" method="post">
+    <div><input type="submit" value="Transaction History"/></div>
+</form>
+</body>
+</html>

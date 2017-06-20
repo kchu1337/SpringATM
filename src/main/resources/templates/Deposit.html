@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form th:action="@{/depositSubmit}" th:object="${transaction}" method="post">
+    <div><label> AccountID: <input type="text" th:field="*{accID}"/> </label></div>
+    <div><label> Amount: <input type="text" th:field="*{amt}"/> </label></div>
+    <div><label> Reason: <input type="text" th:field="*{reason}"/> </label></div>
+    <div><input type="submit" value="Deposit"/></div>
+</form>
+</body>
+</html>
