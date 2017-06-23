@@ -17,7 +17,13 @@
 <body>
 
 <div th:replace="fragments/Navbar :: navbar"></div>
-
+<div class = "container">
+    <div class="jumbotron">
+        <h1 th:text= "'Hello! '+ ${name}"></h1>
+        <h1 th:text = "${message}"></h1>
+        <h1 th:text = "'Current Balance ' + ${balance}"></h1>
+    </div>
+</div>
 <!--<form th:action="@{/deposit}" method="post">
     <div><input type="submit" value="Deposit"/></div>
 </form>

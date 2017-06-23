@@ -16,11 +16,14 @@
 </head>
 <body>
 <div th:replace="fragments/Navbar :: navbar"></div>
+<div class = "container">
 <form th:action="@{/withdrawSubmit}" th:object="${transaction}" method="post">
-    <div><label> AccountID: <input type="text" th:field="*{accID}"/> </label></div>
-    <div><label> Amount: <input type="text" th:field="*{amt}"/> </label></div>
-    <div><label> Reason: <input type="text" th:field="*{reason}"/> </label></div>
+    <table>
+        <tr><td>Amount: </td><td><input type="text" th:field="*{amt}"/> </td></tr>
+        <tr><td> Reason: </td><td><input type="text" th:field="*{reason}"/></td></tr>
+    </table>
     <div><input type="submit" value="Withdraw"/></div>
 </form>
+</div>
 </body>
 </html>

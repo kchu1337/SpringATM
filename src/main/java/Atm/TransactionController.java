@@ -10,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 
@@ -20,12 +23,20 @@ public class TransactionController {
     @Autowired
     private ATMRepository atmRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     private static String account;
+    private static final NumberFormat usFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
     @RequestMapping("/")
-    public String index(Model model) {
-        account = "1234567";
+    public String index(Model model, Principal principal) {
+        account = principal.getName();
+        String name = accountRepository.findNameByAccount(account);
+        model.addAttribute("name", name);
         model.addAttribute("account", account);
+        model.addAttribute("balance", usFormat.format(atmRepository.sumByAccID(account)));
+        model.addAttribute("message", "Welcome to SpringBank");
         return "Index";
     }
 
@@ -46,27 +57,41 @@ public class TransactionController {
     }
 
     @RequestMapping("/depositSubmit")
-    public @ResponseBody String deposit(@ModelAttribute Transaction transaction, Model model) {
+    public String deposit(@ModelAttribute Transaction transaction, Model model) {
+        transaction.setAccID(account);
+        String name = accountRepository.findNameByAccount(account);
         model.addAttribute("transaction",transaction);
         atmRepository.save(transaction);
-        return "Done";
+        model.addAttribute("name", name);
+        model.addAttribute("balance", usFormat.format(atmRepository.sumByAccID(account)));
+        model.addAttribute("message", "Deposited " + usFormat.format(transaction.getAmt()));
+        return "Index";
     }
 
     @RequestMapping("/withdrawSubmit")
-    public @ResponseBody String withdraw(@ModelAttribute Transaction transaction, Model model) {
+    public String withdraw(@ModelAttribute Transaction transaction, Model model) {
+        model.addAttribute("message", "Withdrew " + usFormat.format(transaction.getAmt()));
         transaction.setNeg();
+        transaction.setAccID(account);
+        String name = accountRepository.findNameByAccount(account);
         model.addAttribute("transaction",transaction);
         atmRepository.save(transaction);
-        return "Done";
+        model.addAttribute("name", name);
+        model.addAttribute("balance", usFormat.format(atmRepository.sumByAccID(account)));
+        return "Index";
     }
 
     @RequestMapping("/history")
-    public @ResponseBody String transactionHistory(@ModelAttribute Transaction transaction, Model model) {
-        Iterable<Transaction> listOfTransactions = atmRepository.findAllByAccID(account);
-        String output = "";
-        for (Transaction trans : listOfTransactions){
-            output += trans;
-        }
-        return output;
+    public String transactionHistory(@ModelAttribute Transaction transaction, Model model) {
+        model.addAttribute("page", "history");
+        model.addAttribute("account", account);
+        model.addAttribute("transactionList",atmRepository.findAllByAccID(account));
+        model.addAttribute("balance", usFormat.format(atmRepository.sumByAccID(account)));
+        return "TransactionHistory";
+    }
+
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
     }
 }
