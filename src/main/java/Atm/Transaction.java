@@ -14,8 +14,6 @@ public class Transaction {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int transID;
 
-    @NotNull
-    @Size(min=7, max=7)
     private String accID;
     @NotNull
     private double amt;

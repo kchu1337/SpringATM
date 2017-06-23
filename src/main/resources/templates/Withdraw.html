@@ -19,7 +19,9 @@
 <div class = "container">
 <form th:action="@{/withdrawSubmit}" th:object="${transaction}" method="post">
     <table>
-        <tr><td>Amount: </td><td><input type="text" th:field="*{amt}"/> </td></tr>
+        <tr><td>Amount: </td><td><input type="text" th:field="*{amt}"/>
+            <span th:if="${#fields.hasErrors('amt')}" th:errors="*{amt}">Content Error</span>
+        </td></tr>
         <tr><td> Reason: </td><td><input type="text" th:field="*{reason}"/></td></tr>
     </table>
     <div><input type="submit" value="Withdraw"/></div>

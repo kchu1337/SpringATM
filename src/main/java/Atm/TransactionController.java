@@ -57,7 +57,12 @@ public class TransactionController {
     }
 
     @RequestMapping("/depositSubmit")
-    public String deposit(@ModelAttribute Transaction transaction, Model model) {
+    public String deposit(@Valid Transaction transaction, BindingResult bindingResult, Model model) {
+        model.addAttribute("account", account);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("temp", transaction);
+            return "Deposit";
+        }
         transaction.setAccID(account);
         String name = accountRepository.findNameByAccount(account);
         model.addAttribute("transaction",transaction);
@@ -68,8 +73,13 @@ public class TransactionController {
         return "Index";
     }
 
-    @RequestMapping("/withdrawSubmit")
-    public String withdraw(@ModelAttribute Transaction transaction, Model model) {
+    @PostMapping("/withdrawSubmit")
+    public String withdraw(@Valid Transaction transaction, BindingResult bindingResult, Model model) {
+        model.addAttribute("account", account);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("temp", transaction);
+            return "Withdraw";
+        }
         model.addAttribute("message", "Withdrew " + usFormat.format(transaction.getAmt()));
         transaction.setNeg();
         transaction.setAccID(account);
@@ -82,7 +92,7 @@ public class TransactionController {
     }
 
     @RequestMapping("/history")
-    public String transactionHistory(@ModelAttribute Transaction transaction, Model model) {
+    public String transactionHistory(Model model) {
         model.addAttribute("page", "history");
         model.addAttribute("account", account);
         model.addAttribute("transactionList",atmRepository.findAllByAccID(account));
