@@ -10,4 +10,9 @@ public interface ATMRepository extends CrudRepository<Transaction, Integer>  {
 
     /*@Query("order by accid")
     public List<Transaction> findAllOrderbyaccid();*/
+
+    public List<Transaction> findAllByAccID(String id);
+
+    @Query("Select Sum(amt) From transaction where accid := accid")
+    public double sumByAccID(String id);
 }
