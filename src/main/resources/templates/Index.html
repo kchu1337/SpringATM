@@ -25,7 +25,9 @@
 
 <div th:replace="fragments/Navbar :: navbar"></div>
 <div class = "container">
+    <img src = "assets/icon/Logo.png" align = "middle"/>
     <div class="jumbotron">
+
         <h1 th:text= "'Hello! '+ ${name}"></h1>
         <h1 th:text = "${message}"></h1>
         <h1 th:text = "'Current Balance ' + ${balance}"></h1>
